@@ -1,6 +1,7 @@
-import os, sys
+import io, os, sys
 import pygame
 import simplejson
+from modules.web import *
 
 
 def main():
@@ -16,14 +17,21 @@ def main():
 
     black = 0, 0, 0
 
-    fsex = pygame.font.Font("fsex300.ttf", 16)
+    fsex = pygame.font.Font("data/e4e/fonts/fsex300.ttf", 16)
 
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("dgafTech Engine - Demo 0.0.1 - Bouncing ASCII Dude")
 
     backbuffer = pygame.Surface(internal_size)
-
-    dude = pygame.image.load("dude.png").convert()
+    dude_bin = get_url_as_binary("https://kneedeepincode.net/favicon.png")
+    if not dude_bin == None:
+        dude = pygame.image.load(dude_bin).convert()
+    else:
+        # local fallback
+        if os.path.exists("data/e4e/images/dude.png"):
+            dude = pygame.image.load("data/e4e/images/dude.png").convert()
+        else:
+            sys.exit()
     pygame.display.set_icon(pygame.transform.scale(dude, [32, 32]))
 
     # set colorkey after setting icon
@@ -65,6 +73,7 @@ def main():
         clock.tick(60)
 
         pygame.display.flip()
+
 
 if __name__ == "__main__":
     main()
